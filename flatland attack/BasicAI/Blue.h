@@ -29,7 +29,10 @@ private:
     Player * player;                            // ponteiro para jogador
     Vector speed;                               // velocidade e direção
     float factor;                               // fator de escala
-    
+    const uint tiros_inimigo_especial = 5;      // quantidade maxima de tiros do inimigo especial
+    uint tiros_tomados = 0;
+    bool inimigo_especial = false;
+    uint mudanças_de_cor = 0;
 public:
     Blue(float pX, float pY, Player * p);       // construtor
     ~Blue();                                    // destrutor
@@ -43,6 +46,7 @@ public:
 
 inline void Blue::Draw()
 { sprite->Draw(x, y, Layer::LOWER, scale, rotation); }
+
 
 // ---------------------------------------------------------------------------------
 

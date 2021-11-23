@@ -19,13 +19,35 @@
 
 Blue::Blue(float pX, float pY, Player* p)
 {
+    RandF aleatorio = RandF(1,40);
+    if (aleatorio.Rand() > 35.0f)
+    {
+        inimigo_especial = true;
+        sprite = new Sprite(BasicAI::blue);   
+        //BBox(new Circle(23.0f));
+       
+        speed.RotateTo(0.0f);
+        speed.ScaleTo(0.0f);
+        MoveTo(pX, pY);
+        factor = -0.25f;
+        Scale(5.0f);
+        BBox(new Rect(
+            -1 * float(sprite->Width()) / 5.0f,
+            -1 * float(sprite->Height()) / 5.0f,
+            sprite->Width() / 5.0f,
+            sprite->Height() / 5.0f));
+    }
+    else
+    {
+        sprite = new Sprite(BasicAI::blue);
+        BBox(new Circle(20.0f));
+        speed.RotateTo(0.0f);
+        speed.ScaleTo(0.0f);
+        MoveTo(pX, pY);
+        factor = -0.25f;
+    }
     player = p;
-    sprite = new Sprite(BasicAI::blue);
-    BBox(new Circle(20.0f));
-    speed.RotateTo(0.0f);
-    speed.ScaleTo(0.0f);
-    MoveTo(pX, pY);
-    factor = -0.25f;
+   
     type = BLUE;
 
     // incrementa contador
@@ -49,9 +71,19 @@ void Blue::OnCollision(Object * obj)
     if (obj->Type() == MISSILE)
     {
         BasicAI::scene->Delete(obj, STATIC);
-        BasicAI::scene->Delete(this, MOVING);
-        BasicAI::scene->Add(new Explosion(x, y, 0,0.8,1,BLUE), STATIC);
-        BasicAI::audio->Play(EXPLODE);
+        tiros_tomados++;
+
+        
+
+
+        if ((inimigo_especial && (tiros_tomados >= tiros_inimigo_especial)) || (!inimigo_especial))
+        {
+            BasicAI::scene->Delete(this, MOVING);
+            BasicAI::scene->Add(new Explosion(x, y, 0.0f, 0.8f, 1.0f, BLUE), STATIC);
+            BasicAI::audio->Play(EXPLODE);
+        }
+
+       
     }
 }
 
@@ -72,6 +104,7 @@ void Blue::Update()
     // move o objeto pelo seu vetor velocidade
     Translate(speed.XComponent() * 50.0f * gameTime, -speed.YComponent() * 50.0f * gameTime);
 
+    /*
     // aplica fator de escala
     Scale(1.0f + factor * gameTime);
 
@@ -80,7 +113,7 @@ void Blue::Update()
         factor = 0.25f;
     if (scale > 1.00f)
         factor = -0.25f;
-
+    */
     // mantém o objeto dentro do mundo do jogo
     if (x < 50)
         MoveTo(50, y);
@@ -91,5 +124,9 @@ void Blue::Update()
     if (y > game->Height() - 50)
         MoveTo(x, game->Height() - 50);
 }
+
+
+
+
 
 // -------------------------------------------------------------------------------
