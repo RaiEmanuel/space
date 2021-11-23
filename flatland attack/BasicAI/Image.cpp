@@ -11,11 +11,18 @@
 
 #include "Image.h"
 #include "Graphics.h"
+#include <sstream>
 
 // -------------------------------------------------------------------------------
 
 Image::Image(string filename) : textureView(nullptr), width(0), height(0)
 {
+    /*
+    OutputDebugString("Carregando imagem inicio...\n");
+    std::stringstream s;
+    s << "caminho " << filename << "\n";
+    OutputDebugString(s.str().c_str());
+    */
     // cria sharer resource view da imagem em disco
     D3D11CreateTextureFromFile(
         Graphics::device,               // dispositivo Direct3D
@@ -25,6 +32,7 @@ Image::Image(string filename) : textureView(nullptr), width(0), height(0)
         &textureView,                   // retorna view da textura
         width,                          // retorna largura da imagem
         height);                        // retorna altura da imagem
+    //OutputDebugString("Carregando imagem...\n");
 }
 
 // -------------------------------------------------------------------------------

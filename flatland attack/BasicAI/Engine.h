@@ -59,6 +59,7 @@ public:
             game->Finalize();
             delete game;
             game = new T();
+            game->Size(2200, 1464);
             game->Init();
         }
     };

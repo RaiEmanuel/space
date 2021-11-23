@@ -165,6 +165,7 @@
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game_over.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="BasicAI.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Tela_inicial.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileSet.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -204,6 +206,7 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Game_over.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="BasicAI.h" />
     <ClInclude Include="Graphics.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Tela_inicial.h" />
     <ClInclude Include="Teleportation.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileSet.h" />

@@ -14,6 +14,8 @@
 #include "BasicAI.h"
 #include "Engine.h"    
 #include "Delay.h"
+#include "Game_over.h"
+#include "Tela_inicial.h"
 
 // ------------------------------------------------------------------------------
 
@@ -30,8 +32,14 @@ Image  * BasicAI::orange  = nullptr;
 
 void BasicAI::Init() 
 {
+
+
     // cria sistema de áudio
     audio = new Audio();
+    
+
+    
+   
     audio->Add(START, "Resources/Start.wav");
     audio->Add(THEME, "Resources/Theme.wav");
     audio->Add(FIRE, "Resources/Fire.wav", 2);
@@ -51,13 +59,14 @@ void BasicAI::Init()
     audio->Volume(MAGENTA, 0.50f);
     audio->Volume(BLUE, 0.50f);
     audio->Volume(GREEN, 0.5f);
+    
 
     // carrega imagens das geometrias
     blue    = new Image("Resources/quad.png");
     green   = new Image("Resources/circle.png");
     magenta = new Image("Resources/triangle.png");
     orange  = new Image("Resources/x.png");
-
+   
     // carrega/incializa objetos
     backg   = new Background("Resources/earth.jpg");
     player  = new Player();
@@ -87,6 +96,8 @@ void BasicAI::Init()
 
 void BasicAI::Update()
 {
+   
+    
     // sai com o pressionamento da tecla ESC
     if (window->KeyDown(VK_ESCAPE))
         window->Close();
@@ -138,6 +149,24 @@ void BasicAI::Update()
     // ativa ou desativa o heads up display
     if (window->KeyPress('H'))
         viewHUD = !viewHUD;
+
+    /*
+    if (window->KeyDown('P'))
+    {
+
+        audio->Stop(START);
+        audio->Stop(THEME);
+        audio->Stop(FIRE);
+        audio->Stop(EXPLODE);
+        audio->Stop(ORANGE);
+        audio->Stop(MAGENTA);
+        audio->Stop(BLUE);
+        audio->Stop(GREEN);
+
+        Engine::Next<Game_over>();
+    }
+    */
+
 } 
 
 // ------------------------------------------------------------------------------
@@ -163,7 +192,7 @@ void BasicAI::Draw()
 
 void BasicAI::Finalize()
 {
-    delete audio;
+    
     delete hud;
     delete scene;
     delete backg;
@@ -172,6 +201,9 @@ void BasicAI::Finalize()
     delete green;
     delete magenta;
     delete orange;
+    
+    
+    delete audio;
 }
 
 
@@ -186,9 +218,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     Engine * engine = new Engine();
 
     // configura janela
-    //engine->window->Mode(WINDOWED);
-    //engine->window->Size(1152, 648);
-    engine->window->Mode(BORDERLESS);
+    engine->window->Mode(WINDOWED);
+    engine->window->Size(800, 600);
+    //engine->window->Mode(BORDERLESS);
     engine->window->Color(0, 0, 0);
     engine->window->Title("BasicAI");
     engine->window->Icon(IDI_ICON);
@@ -197,7 +229,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     //engine->graphics->VSync(true);
 
     // cria o jogo
-    Game * game = new BasicAI();
+    //Game * game = new BasicAI();
+    Game * game = new  BasicAI();
+
 
     // configura o jogo
     game->Size(2200, 1464);
