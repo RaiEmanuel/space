@@ -151,152 +151,190 @@ void Player::Move(Vector && v)
 
 void Player::Update()
 {
-    // magnitude do vetor aceleração
-    float accel = 40.0f * gameTime;
 
-    // -----------------
-    // Controle
-    // -----------------
-
-    if (gamepadOn)
+    if (!morto)
     {
-        // atualiza estado das teclas e eixos do controle
-        gamepad->UpdateState();
+        // magnitude do vetor aceleração
+        float accel = 40.0f * gameTime;
 
-        // constrói vetor com base na posição do analógico esquerdo
-        float ang = Line::Angle(Point(0, 0), Point(gamepad->Axis(AxisX) / 25.0f, gamepad->Axis(AxisY) / 25.0f));
-        float mag = Point::Distance(Point(0, 0), Point(gamepad->Axis(AxisX) / 25.0f, gamepad->Axis(AxisY) / 25.0f));
+        // -----------------
+        // Controle
+        // -----------------
 
-        // nenhuma direção selecionada
-        if (mag == 0)
+        if (gamepadOn)
         {
-            // se a velocidade estiver muita baixa
-            if (speed.Magnitude() < 0.1)
+            // atualiza estado das teclas e eixos do controle
+            gamepad->UpdateState();
+
+            // constrói vetor com base na posição do analógico esquerdo
+            float ang = Line::Angle(Point(0, 0), Point(gamepad->Axis(AxisX) / 25.0f, gamepad->Axis(AxisY) / 25.0f));
+            float mag = Point::Distance(Point(0, 0), Point(gamepad->Axis(AxisX) / 25.0f, gamepad->Axis(AxisY) / 25.0f));
+
+            // nenhuma direção selecionada
+            if (mag == 0)
             {
-                // pare de se movimentar imediatamente
-                speed.ScaleTo(0.0f);
+                // se a velocidade estiver muita baixa
+                if (speed.Magnitude() < 0.1)
+                {
+                    // pare de se movimentar imediatamente
+                    speed.ScaleTo(0.0f);
+                }
+                else
+                {
+                    // some um vetor no sentido contrário para frear
+                    Move(Vector(speed.Angle() + 180.0f, 5.0f * gameTime));
+                    //RotateTo(speed.Angle() + 180);
+                }
             }
             else
             {
-                // some um vetor no sentido contrário para frear
-                Move(Vector(speed.Angle() + 180.0f, 5.0f * gameTime));
-                //RotateTo(speed.Angle() + 180);
+                // movimente-se para a nova direção
+                Move(Vector(ang, mag * gameTime));
+                RotateTo(-speed.Angle() + 90);
+            }
+
+            // dispara míssil com o analógico direito
+            if (AxisTimed(AxisRX, AxisRY, 0.150f))
+            {
+                float ang = Line::Angle(Point(0, 0), Point(float(gamepad->Axis(AxisRX)), float(gamepad->Axis(AxisRY))));
+                BasicAI::audio->Play(FIRE);
+                BasicAI::scene->Add(new Missile(ang), STATIC);
             }
         }
+
+        // -----------------
+        // Teclado
+        // -----------------
+
         else
         {
-            // movimente-se para a nova direção
-            Move(Vector(ang, mag * gameTime));
-            RotateTo(-speed.Angle() + 90);
-        }
+            // controla movimentação do jogador
+            if (window->KeyDown('D') && window->KeyDown('W'))
+            {
+                Move(Vector(45.0f, accel));
+                RotateTo(-45.0f + 90.0f);
+            }
 
-        // dispara míssil com o analógico direito
-        if (AxisTimed(AxisRX, AxisRY, 0.150f))
-        {
-            float ang = Line::Angle(Point(0,0), Point(float(gamepad->Axis(AxisRX)), float(gamepad->Axis(AxisRY))));
-            BasicAI::audio->Play(FIRE);
-            BasicAI::scene->Add(new Missile(ang), STATIC);
-        }
-    }
+            else if (window->KeyDown('A') && window->KeyDown('W'))
+            {
+                Move(Vector(135.0f, accel));
+                RotateTo(-135.0f + 90.0f);
+            }
 
-    // -----------------
-    // Teclado
-    // -----------------
+            else if (window->KeyDown('A') && window->KeyDown('S'))
+            {
+                Move(Vector(225.0f, accel));
+                RotateTo(-225.0f + 90.0f);
+            }
 
-    else
-    {
-        // controla movimentação do jogador
-        if (window->KeyDown('D') && window->KeyDown('W'))
-            Move(Vector(45.0f, accel));
-        else if (window->KeyDown('A') && window->KeyDown('W'))
-            Move(Vector(135.0f, accel));
-        else if (window->KeyDown('A') && window->KeyDown('S'))
-            Move(Vector(225.0f, accel));
-        else if (window->KeyDown('D') && window->KeyDown('S'))
-            Move(Vector(315.0f, accel));
-        else if (window->KeyDown('D'))
-            Move(Vector(0.0f, accel));
-        else if (window->KeyDown('A'))
-            Move(Vector(180.0f, accel));
-        else if (window->KeyDown('W'))
-            Move(Vector(90.0f, accel));
-        else if (window->KeyDown('S'))
-            Move(Vector(270.0f, accel));
-        else
-            // se nenhuma tecla está pressionada comece a frear
-            if (speed.Magnitude() > 0.1f)
-                Move(Vector(speed.Angle() + 180.0f, 5.0f * gameTime));
+            else if (window->KeyDown('D') && window->KeyDown('S'))
+            {
+                Move(Vector(315.0f, accel));
+                RotateTo(-315.0f + 90.0f);
+            }
+
+            else if (window->KeyDown('D'))
+            {
+                Move(Vector(0.0f, accel));
+                RotateTo(-0.0f + 90.0f);
+            }
+
+            else if (window->KeyDown('A'))
+            {
+                Move(Vector(180.0f, accel));
+                RotateTo(-180.0f + 90.0f);
+            }
+            else if (window->KeyDown('W'))
+            {
+                Move(Vector(90.0f, accel));
+                RotateTo(-90.0f + 90.0f);
+            }
+
+            else if (window->KeyDown('S'))
+            {
+                Move(Vector(270.0f, accel));
+                RotateTo(-270.0f + 90.0f);
+            }
+
             else
-                // velocidade muita baixa, não use soma vetorial, apenas pare
-                speed.ScaleTo(0.0f);
+                // se nenhuma tecla está pressionada comece a frear
+                if (speed.Magnitude() > 0.1f)
+                    Move(Vector(speed.Angle() + 180.0f, 5.0f * gameTime));
+                else
+                    // velocidade muita baixa, não use soma vetorial, apenas pare
+                    speed.ScaleTo(0.0f);
 
-        // controla direção dos disparos
-        if (window->KeyDown(VK_RIGHT) && window->KeyDown(VK_UP)) {
-            keysPressed = true;
-            firingAngle = 45.0f;
-        } 
-        else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_UP)) {
-            keysPressed = true;
-            firingAngle = 135.0f;
-        }
-        else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_DOWN)) {
-            keysPressed = true;
-            firingAngle = 225.0f;
-        }
-        else if (window->KeyDown(VK_RIGHT) && window->KeyDown(VK_DOWN)) {
-            keysPressed = true;
-            firingAngle = 315.0f;
-        }
-        else if (window->KeyDown(VK_RIGHT)) {
-            keysPressed = true;
-            firingAngle = 0.0f;
-        }
-        else if (window->KeyDown(VK_LEFT)) {
-            keysPressed = true;
-            firingAngle = 180.0f;
-        }
-        else if (window->KeyDown(VK_UP)) {
-            keysPressed = true;
-            firingAngle = 90.0f;
-        }
-        else if (window->KeyDown(VK_DOWN)) {
-            keysPressed = true;
-            firingAngle = 270.0f;
-        }
-        else
-        {
-            keysPressed = false;
+            // controla direção dos disparos
+            if (window->KeyDown(VK_RIGHT) && window->KeyDown(VK_UP)) {
+                keysPressed = true;
+                firingAngle = 45.0f;
+            }
+            else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_UP)) {
+                keysPressed = true;
+                firingAngle = 135.0f;
+            }
+            else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_DOWN)) {
+                keysPressed = true;
+                firingAngle = 225.0f;
+            }
+            else if (window->KeyDown(VK_RIGHT) && window->KeyDown(VK_DOWN)) {
+                keysPressed = true;
+                firingAngle = 315.0f;
+            }
+            else if (window->KeyDown(VK_RIGHT)) {
+                keysPressed = true;
+                firingAngle = 0.0f;
+            }
+            else if (window->KeyDown(VK_LEFT)) {
+                keysPressed = true;
+                firingAngle = 180.0f;
+            }
+            else if (window->KeyDown(VK_UP)) {
+                keysPressed = true;
+                firingAngle = 90.0f;
+            }
+            else if (window->KeyDown(VK_DOWN)) {
+                keysPressed = true;
+                firingAngle = 270.0f;
+            }
+            else
+            {
+                keysPressed = false;
+            }
+
+            // dispara míssil
+            if (KeysTimed(keysPressed, 0.150f))
+            {
+                BasicAI::audio->Play(FIRE);
+                BasicAI::scene->Add(new Missile(firingAngle), STATIC);
+            }
         }
 
-        // dispara míssil
-        if (KeysTimed(keysPressed, 0.150f))
-        {
-            BasicAI::audio->Play(FIRE);
-            BasicAI::scene->Add(new Missile(firingAngle), STATIC);
-        }
+        // movimenta objeto pelo seu vetor velocidade
+        Translate(speed.XComponent() * 50.0f * gameTime, -speed.YComponent() * 50.0f * gameTime);
+
+        // atualiza calda do jogador
+        tail->Config().angle = speed.Angle() + 180;
+        tail->Generate(x - 10 * cos(speed.Radians()), y + 10 * sin(speed.Radians()));
+        tail->Update(gameTime);
+
+        Hud::particles -= tailCount;
+        tailCount = tail->Size();
+        Hud::particles += tailCount;
+
+        // restringe a área do jogo
+        if (x < 50)
+            MoveTo(50, y);
+        if (y < 50)
+            MoveTo(x, 50);
+        if (x > game->Width() - 50)
+            MoveTo(game->Width() - 50, y);
+        if (y > game->Height() - 50)
+            MoveTo(x, game->Height() - 50);
     }
 
-    // movimenta objeto pelo seu vetor velocidade
-    Translate(speed.XComponent() * 50.0f * gameTime, -speed.YComponent() * 50.0f * gameTime);
 
-    // atualiza calda do jogador
-    tail->Config().angle = speed.Angle() + 180;
-    tail->Generate(x - 10 * cos(speed.Radians()), y + 10 * sin(speed.Radians()));
-    tail->Update(gameTime);
     
-    Hud::particles -= tailCount;
-    tailCount = tail->Size();
-    Hud::particles += tailCount;
-
-    // restringe a área do jogo
-    if (x < 50)
-        MoveTo(50, y);
-    if (y < 50)
-        MoveTo(x, 50);
-    if (x > game->Width() - 50)
-        MoveTo(game->Width() - 50, y);
-    if (y > game->Height() - 50)
-        MoveTo(x, game->Height() - 50);
 }
 
 // ---------------------------------------------------------------------------------
@@ -305,6 +343,19 @@ void Player::Draw()
 {
     sprite->Draw(x, y, Layer::MIDDLE, 1.0f, -speed.Angle() + 90.0f);
     tail->Draw(Layer::LOWER, 1.0f);
+}
+
+
+void Player::OnCollision(Object* obj)
+{
+    if (obj->Type() == BLUE || obj->Type() == GREEN || obj->Type() == MAGENTA || obj->Type() == ORANGE || obj->Type() == WHITE)
+    {
+        morto = true;
+        delete sprite;
+        BasicAI::scene->Remove();
+        sprite = new Sprite("Resources/rocketgameover.png");
+    }
+
 }
 
 // -------------------------------------------------------------------------------

@@ -49,7 +49,9 @@ public:
     
     bool AxisTimed(int axisX, int axisY, float time);
     bool KeysTimed(bool pressed, float time);
+    bool morto = false;
 
+    void OnCollision(Object* obj);              // resolução da colisão
     void Move(Vector && v);             // movimenta jogador
     void Update();                      // atualização
     void Draw();                        // desenho
