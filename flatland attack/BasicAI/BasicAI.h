@@ -25,7 +25,7 @@
 
 enum Ids 
 { 
-    PLAYER, MISSILE, WALLHIT, BLUE, GREEN, MAGENTA, ORANGE, 
+    PLAYER, MISSILE, WALLHIT, BLUE, GREEN, MAGENTA, ORANGE, WHITE,
     THEME, START, FIRE, EXPLODE, HITWALL, EXPLOSION 
 };
 
@@ -47,6 +47,7 @@ public:
     static Image * green;           // imagem do inimigo green
     static Image * magenta;         // imagem do inimigo magenta
     static Image * orange;          // imagem do inimigo orange
+    static Image * white;          // imagem do inimigo orange
     
     static bool viewHUD;            // hud visível
 

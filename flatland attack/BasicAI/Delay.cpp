@@ -15,6 +15,7 @@
 #include "WaveM.h"
 #include "WaveB.h"
 #include "WaveG.h"
+#include "WaveW.h"
 #include "Hud.h"
 
 // ------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Delay::Delay()
     fase2 = false;
     fase3 = false;
     fase4 = false;
+    fase5 = false;
 }
 
 // ------------------------------------------------------------------------------
@@ -49,7 +51,7 @@ void Delay::Update()
         notPlayed = false;
     }
 
-    if (!fase1 && timer.Elapsed(6.0f))
+    if (!fase1 && timer.Elapsed(4.0f))
     {
         // toca música do jogo
         BasicAI::audio->Play(THEME, true);
@@ -58,23 +60,28 @@ void Delay::Update()
         fase1 = true;
     }
 
-    if (!fase2 && timer.Elapsed(8.0f))
+    if (!fase2 && timer.Elapsed(5.0f))
     {
         BasicAI::scene->Add(new WaveM(), STATIC);
         fase2 = true;
     }
 
-    if (!fase3 && timer.Elapsed(10.0f))
+    if (!fase3 && timer.Elapsed(6.0f))
     {
         BasicAI::scene->Add(new WaveB(), STATIC);
         fase3 = true;
     }
 
-    if (!fase4 && timer.Elapsed(15.0f))
+    if (!fase4 && timer.Elapsed(7.0f))
     {
         BasicAI::scene->Add(new WaveG(), STATIC);
-        BasicAI::scene->Delete();
         fase4 = true;
+    }
+
+    if (!fase5 && timer.Elapsed(3.0f))
+    {
+        BasicAI::scene->Add(new WaveW(), STATIC);
+        fase5 = true;
     }
 }
 

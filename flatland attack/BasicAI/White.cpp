@@ -10,69 +10,69 @@
 **********************************************************************************/
 
 #include "BasicAI.h"
-#include "Magenta.h"
+#include "White.h"
 #include "Random.h" 
 #include "Hud.h"
 #include "Explosion.h"
 
 // ---------------------------------------------------------------------------------
 
-Magenta::Magenta(float pX, float pY, Player * p)
+White::White(float pX, float pY, Player * p)
 {
     player = p;
-    sprite = new Sprite(BasicAI::magenta);
+    sprite = new Sprite(BasicAI::white);
     //BBox(new Circle(18.0f));
-    Point vertices[3] =
+
+    Point vertex[6] =
     {
-        Point(-23,23),Point(-23,-23),Point(23,23)
+        Point(-20,0), Point(-15,20), Point(15,20), Point(20,0),Point(15,-20),Point(-15,-20)
     };
 
-
-    BBox(new Poly(vertices, 3));
+    BBox(new Poly(vertex, 6));
     
     speed.RotateTo(0);
     speed.ScaleTo(2.0f);
     
     MoveTo(pX, pY);
-    type = MAGENTA;
+    type = WHITE;
 
     // incrementa contador
-    ++Hud::magentas;
+    ++Hud::whites;
 }
 
 // ---------------------------------------------------------------------------------
 
-Magenta::~Magenta()
+White::~White()
 {
     delete sprite;
 
     // decrementa contador
-    --Hud::magentas;
+    --Hud::whites;
 }
 
 // -------------------------------------------------------------------------------
 
-void Magenta::OnCollision(Object * obj)
+void White::OnCollision(Object * obj)
 {
     if (obj->Type() == MISSILE)
     {
         BasicAI::scene->Delete(obj, STATIC);
         BasicAI::scene->Delete(this, MOVING);
-        BasicAI::scene->Add(new Explosion(x, y, 1,0,1,MAGENTA), STATIC);
+        BasicAI::scene->Add(new Explosion(x, y, 1,1,1,WHITE), STATIC);
         BasicAI::audio->Play(EXPLODE);
     }
 }
 
 // -------------------------------------------------------------------------------
 
-void Magenta::Update()
+void White::Update()
 {
     // ajusta ângulo do vetor 
     speed.RotateTo(Line::Angle(Point(x, y), Point(player->X(), player->Y())));
-    Rotate(200 * gameTime);
+    //Rotate(200 * gameTime);
 
     // movimenta objeto pelo seu vetor velocidade
-    Translate(speed.XComponent() * 60.0f * gameTime, -speed.YComponent() * 60.0f * gameTime);
+    //Translate(speed.XComponent() * 60.0f * gameTime, -speed.YComponent() * 60.0f * gameTime);
 }
 
 // -------------------------------------------------------------------------------

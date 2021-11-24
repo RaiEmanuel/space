@@ -20,6 +20,7 @@ uint Hud::oranges = 0;
 uint Hud::magentas = 0;
 uint Hud::blues = 0;
 uint Hud::greens = 0;
+uint Hud::whites = 0;
 uint Hud::particles = 0;
 
 // ------------------------------------------------------------------------------

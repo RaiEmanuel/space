@@ -40,6 +40,7 @@ public:
     static uint magentas;               // número de inimigos rosa
     static uint blues;                  // número de inimigos azul
     static uint greens;                 // número de inimigos verde
+    static uint whites;                 // número de inimigos verde
     static uint particles;              // número de partículas ativas
 
     Hud();                              // construtor

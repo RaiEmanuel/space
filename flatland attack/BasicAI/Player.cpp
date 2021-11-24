@@ -29,7 +29,18 @@ Player::Player()
     missile = new Image("Resources/missile.png");
     speed.RotateTo(90.0f);
     speed.ScaleTo(0.0f);
-    BBox(new Circle(18.0f));
+    //BBox(new Circle(18.0f));
+
+    Point vertices[15] =
+    {
+        Point(-2,-55),
+        Point(-10,-40),Point(-10,-18),Point(-16,-10),Point(-16,22),Point(-26,38),Point(-16,41),Point(-16,52),
+        Point(12,52),Point(12,41),Point(24,38),Point(12,22),Point(12,-10),Point(6,-18),Point(6,-40),
+    };
+
+
+    BBox(new Poly(vertices, 15));
+
     MoveTo(game->CenterX(), game->CenterY());
     type = PLAYER;
 
@@ -169,12 +180,14 @@ void Player::Update()
             {
                 // some um vetor no sentido contrário para frear
                 Move(Vector(speed.Angle() + 180.0f, 5.0f * gameTime));
+                //RotateTo(speed.Angle() + 180);
             }
         }
         else
         {
             // movimente-se para a nova direção
             Move(Vector(ang, mag * gameTime));
+            RotateTo(-speed.Angle() + 90);
         }
 
         // dispara míssil com o analógico direito

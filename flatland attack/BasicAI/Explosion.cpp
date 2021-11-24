@@ -36,6 +36,9 @@ Explosion::Explosion(float pX, float pY, float r, float g, float b, Ids id)
     case ORANGE:
         explosion.imgFile = "Resources/particle-yellow.png";    // arquivo de imagem
         break;
+    case WHITE:
+        explosion.imgFile = "Resources/particle-white.png";    // arquivo de imagem
+        break;
     }
     
     

@@ -27,18 +27,14 @@ Image  * BasicAI::blue    = nullptr;
 Image  * BasicAI::green   = nullptr;
 Image  * BasicAI::magenta = nullptr;
 Image  * BasicAI::orange  = nullptr;
+Image  * BasicAI::white = nullptr;
 
 // ------------------------------------------------------------------------------
 
 void BasicAI::Init() 
 {
-
-
     // cria sistema de áudio
     audio = new Audio();
-    
-
-    
    
     audio->Add(START, "Resources/Start.wav");
     audio->Add(THEME, "Resources/Theme.wav");
@@ -66,6 +62,7 @@ void BasicAI::Init()
     green   = new Image("Resources/circle.png");
     magenta = new Image("Resources/triangle.png");
     orange  = new Image("Resources/x.png");
+    white = new Image("Resources/white.png");
    
     // carrega/incializa objetos
     backg   = new Background("Resources/earth.jpg");
@@ -184,7 +181,7 @@ void BasicAI::Draw()
         hud->Draw();
 
     // desenha bounding box
-    if (viewBBox)
+    //if (viewBBox)
         scene->DrawBBox();
 }
 
@@ -201,6 +198,7 @@ void BasicAI::Finalize()
     delete green;
     delete magenta;
     delete orange;
+    delete white;
     
     
     delete audio;
@@ -218,11 +216,11 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     Engine * engine = new Engine();
 
     // configura janela
-    engine->window->Mode(WINDOWED);
-    engine->window->Size(800, 600);
-    //engine->window->Mode(BORDERLESS);
+    //engine->window->Mode(WINDOWED);
+    //engine->window->Size(2200, 1464);
+    engine->window->Mode(BORDERLESS);
     engine->window->Color(0, 0, 0);
-    engine->window->Title("BasicAI");
+    engine->window->Title("Flatland Attack");
     engine->window->Icon(IDI_ICON);
     engine->window->Cursor(IDC_CURSOR);
     engine->window->HideCursor(true);
