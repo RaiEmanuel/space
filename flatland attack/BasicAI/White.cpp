@@ -69,10 +69,10 @@ void White::Update()
 {
     // ajusta ângulo do vetor 
     speed.RotateTo(Line::Angle(Point(x, y), Point(player->X(), player->Y())));
-    //Rotate(200 * gameTime);
+    Rotate(200 * gameTime);
 
     // movimenta objeto pelo seu vetor velocidade
-    //Translate(speed.XComponent() * 60.0f * gameTime, -speed.YComponent() * 60.0f * gameTime);
+    Translate(speed.XComponent() * 60.0f * gameTime, -speed.YComponent() * 60.0f * gameTime);
 }
 
 // -------------------------------------------------------------------------------

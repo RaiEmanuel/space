@@ -152,7 +152,7 @@ void Player::Move(Vector && v)
 void Player::Update()
 {
 
-    if (!morto)
+    if (!BasicAI::morto)
     {
         // magnitude do vetor aceleração
         float accel = 40.0f * gameTime;
@@ -314,9 +314,12 @@ void Player::Update()
         Translate(speed.XComponent() * 50.0f * gameTime, -speed.YComponent() * 50.0f * gameTime);
 
         // atualiza calda do jogador
-        tail->Config().angle = speed.Angle() + 180;
-        tail->Generate(x - 10 * cos(speed.Radians()), y + 10 * sin(speed.Radians()));
-        tail->Update(gameTime);
+        
+            tail->Config().angle = speed.Angle() + 180;
+            tail->Generate(x - 10 * cos(speed.Radians()), y + 10 * sin(speed.Radians()));
+            tail->Update(gameTime);
+        
+        
 
         Hud::particles -= tailCount;
         tailCount = tail->Size();
@@ -350,10 +353,19 @@ void Player::OnCollision(Object* obj)
 {
     if (obj->Type() == BLUE || obj->Type() == GREEN || obj->Type() == MAGENTA || obj->Type() == ORANGE || obj->Type() == WHITE)
     {
-        morto = true;
-        delete sprite;
-        BasicAI::scene->Remove();
-        sprite = new Sprite("Resources/rocketgameover.png");
+        BasicAI::scene->Delete(obj, MOVING);
+        ++hit;
+        if (hit >= 3) {
+            BasicAI::morto = true;
+            delete sprite;
+            //BasicAI::scene->Remove();
+            sprite = new Sprite("Resources/rocketgameover.png");
+            //MoveTo(window->CenterX(), window->CenterY());
+            // atualiza calda do jogador
+            //tail->Config().frequency = 150;
+            //RotateTo(-90);
+        }
+        
     }
 
 }

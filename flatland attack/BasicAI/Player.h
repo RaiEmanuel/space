@@ -29,6 +29,7 @@ private:
     Sprite * sprite;                    // sprite do objeto
     Particles * tail;                   // calda do jogador
     uint tailCount;                     // quantidade de partículas da calda
+    uint hit = 0;
     
     Controller * gamepad;               // leitura do controle
     bool gamepadOn;                     // controle está ligado

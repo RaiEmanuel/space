@@ -28,6 +28,7 @@ Image  * BasicAI::green   = nullptr;
 Image  * BasicAI::magenta = nullptr;
 Image  * BasicAI::orange  = nullptr;
 Image  * BasicAI::white = nullptr;
+bool BasicAI::morto = false;
 
 // ------------------------------------------------------------------------------
 
@@ -100,9 +101,9 @@ void BasicAI::Update()
         window->Close();
 
     // atualiza cena e calcula colisões
-    scene->Update();
+    
     scene->CollisionDetection();
-
+    scene->Update();
     // ---------------------------------------------------
     // atualiza a viewport
     // ---------------------------------------------------
@@ -164,6 +165,17 @@ void BasicAI::Update()
     }
     */
 
+    if (morto) {
+        scene->Begin();
+        auto i = scene->Next();
+        for (; i != nullptr; ) {
+            if (i->Type() == MAGENTA || i->Type() == GREEN || i->Type() == WHITE || i->Type() == ORANGE || i->Type() == BLUE) {
+                scene->Delete(i, MOVING);
+            }
+            i = scene->Next();
+        }
+    }
+    
 } 
 
 // ------------------------------------------------------------------------------
@@ -216,9 +228,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     Engine * engine = new Engine();
 
     // configura janela
-    //engine->window->Mode(WINDOWED);
-    //engine->window->Size(2200, 1464);
-    engine->window->Mode(BORDERLESS);
+    engine->window->Mode(WINDOWED);
+    engine->window->Size(800, 600);
+    //engine->window->Mode(BORDERLESS);
     engine->window->Color(0, 0, 0);
     engine->window->Title("Flatland Attack");
     engine->window->Icon(IDI_ICON);

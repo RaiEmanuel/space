@@ -48,6 +48,7 @@ public:
     static Image * magenta;         // imagem do inimigo magenta
     static Image * orange;          // imagem do inimigo orange
     static Image * white;          // imagem do inimigo orange
+    static bool morto;
     
     static bool viewHUD;            // hud visível
 
